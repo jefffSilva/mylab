@@ -29,4 +29,11 @@ jobs:
       with:
         name: build
         path: build/
+  
+  deploy:
+      runs-on: ubuntu-latest
+      
+      steps:
+        - name: echo 
+          run: echo "Hey I was deploy on k8s"
 
