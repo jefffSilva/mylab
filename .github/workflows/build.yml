@@ -35,5 +35,5 @@ jobs:
       
       steps:
         - name: echo 
-          run: echo "Hey I was deploy on k8s"
+          run: echo "Hey I was deployed on k8s"
 
