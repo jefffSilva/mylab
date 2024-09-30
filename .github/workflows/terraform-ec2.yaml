@@ -1,0 +1,41 @@
+name: Terraform Apply with OIDC
+
+on:
+  workflow_run:
+    workflows: ["Build React App"]
+    types:
+      - completed
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Configure AWS Credentials with OIDC
+      uses: aws-actions/configure-aws-credentials@v3
+      with:
+        role-to-assume: arn:aws:iam::YOUR_AWS_ACCOUNT_ID:role/YOUR_ROLE_NAME
+        aws-region: us-east-1
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.5.6
+
+    - name: Initialize Terraform
+      run: terraform init
+
+    - name: Plan Terraform Deployment
+      run: terraform plan
+
+    - name: Apply Terraform Configuration
+      run: terraform apply -auto-approve
